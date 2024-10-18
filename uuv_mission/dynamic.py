@@ -24,13 +24,13 @@ class Trajectory:
 
     def plot_completed_mission(self, mission):
         x_values = np.arange(len(self.position))
-        min_depth = np.min(self.position[:, 1])
-        max_height = np.max(self.position[:, 1])
+        min_depth = np.min(mission.cave_depth)
+        max_height = np.max(mission.cave_height)
         
         plt.figure(figsize=(20, 5))
-        plt.fill_between(x_values, mission.cave_depth, min_depth*np.ones(len(x_values)), 
+        plt.fill_between(x_values, mission.cave_depth, min_depth * np.ones(len(x_values)), 
                          color='saddlebrown', alpha=0.3)
-        plt.fill_between(x_values, max_height*np.ones(len(x_values)), mission.cave_height, 
+        plt.fill_between(x_values, max_height * np.ones(len(x_values)), mission.cave_height, 
                          color='saddlebrown', alpha=0.3)
         plt.plot(self.position[:, 0], self.position[:, 1], label='Trajectory')
         plt.plot(mission.reference, 'r', linestyle='--', label='Reference')
@@ -78,7 +78,7 @@ class ClosedLoop:
             error = mission.reference[t] - observation_t
             actions[t] = self.controller.compute_action(error)
             self.plant.transition(actions[t], disturbances[t])
-            positions[t, 0] = t  # Assuming time or some other x-axis value
+            positions[t, 0] = t
             positions[t, 1] = self.plant.get_depth()
 
         return Trajectory(positions)
