@@ -5,24 +5,42 @@ import pandas as pd
 
 class Submarine:
     def __init__(self):
+        """
+        Initialize the Submarine with a depth of 0.0.
+        """
         self.depth = 0.0
 
     def get_depth(self):
+        """
+        Get the current depth of the Submarine.
+        """
         return self.depth
 
     def transition(self, action, disturbance):
+        """
+        Update the depth based on action and disturbance.
+        """
         self.depth += action + disturbance
 
 class Trajectory:
     def __init__(self, positions):
+        """
+        Initialize the Trajectory with positions.
+        """
         # Ensure positions is a 2-dimensional array
         self.position = np.array(positions).reshape(-1, 2)
         
     def plot(self):
+        """
+        Plot the trajectory.
+        """
         plt.plot(self.position[:, 0], self.position[:, 1])
         plt.show()
 
     def plot_completed_mission(self, mission):
+        """
+        Plot the completed mission trajectory with cave boundaries.
+        """
         x_values = np.arange(len(self.position))
         min_depth = np.min(mission.cave_depth)
         max_height = np.max(mission.cave_height)
