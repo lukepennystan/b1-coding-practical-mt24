@@ -5,21 +5,12 @@ import pandas as pd
 
 class Submarine:
     def __init__(self):
-        """
-        Initialize the Submarine with a depth of 0.0.
-        """
         self.depth = 0.0
 
     def get_depth(self):
-        """
-        Get the current depth of the Submarine.
-        """
         return self.depth
 
     def transition(self, action, disturbance):
-        """
-        Update the depth based on action and disturbance.
-        """
         self.depth += action + disturbance
 
 class Trajectory:
@@ -27,7 +18,6 @@ class Trajectory:
         """
         Initialize the Trajectory with positions.
         """
-        # Ensure positions is a 2-dimensional array
         self.position = np.array(positions).reshape(-1, 2)
         
     def plot(self):
@@ -71,15 +61,13 @@ class Mission:
 
     @classmethod
     def from_csv(cls, file_name: str):
-        # Use pandas to read the CSV file
+        """
+        Loads the mission from a CSV file.
+        """
         df = pd.read_csv(file_name)
-        
-        # Extract the relevant columns
         reference = df['reference'].to_numpy()
         cave_height = df['cave_height'].to_numpy()
         cave_depth = df['cave_depth'].to_numpy()
-        
-        # Return an instance of Mission
         return cls(reference, cave_height, cave_depth)
 
 class ClosedLoop:
@@ -96,7 +84,7 @@ class ClosedLoop:
             error = mission.reference[t] - observation_t
             actions[t] = self.controller.compute_action(error)
             self.plant.transition(actions[t], disturbances[t])
-            positions[t, 0] = t
+            positions[t, 0] = t  # Assuming time or some other x-axis value
             positions[t, 1] = self.plant.get_depth()
 
         return Trajectory(positions)
